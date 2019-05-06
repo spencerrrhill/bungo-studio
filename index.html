@@ -1,9 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
   <link href="https://fonts.googleapis.com/css?family=Heebo" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="style.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-  <link type="text/javascript" href="script.js">
+  <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
+
+<body>
 
 <div class="marquee">
 <!-- Generator: Adobe Illustrator 23.0.1, SVG Export Plug-In  -->
@@ -47,12 +51,99 @@
 
 <div class="cover-bg">
   <div class="body-stuff">
-  <h1>Welcome to doodletown</h1>
-    <h2><a href="https://www.instagram.com/bungo.studio/">@bungo.studio</a></h2>
+  <h2>We have no idea what we're doing</h2>
+    <h1><a href="https://www.instagram.com/bungo.studio/">@bungo.studio</a></h1>
+    <h3>Based on a codepen by <a href="https://codepen.io/stezu/">Stephen Zuniga</a></h3>
   </div>
 </div>
 
+<script type="text/javascript">
+	(function ($, window, undefined) {
+	$.fn.marqueeify = function (options) {
+		var settings = $.extend({
+			horizontal: true,
+			vertical: true,
+			speed: 200, // In pixels per second
+			container: $(this).parent(),
+			bumpEdge: function () {}
+		}, options);
+		
+		return this.each(function () {
+			var containerWidth, containerHeight, elWidth, elHeight, move, getSizes,
+				$el = $(this);
 
+			getSizes = function () {
+				containerWidth = settings.container.outerWidth();
+				containerHeight = settings.container.outerHeight();
+				elWidth = $el.outerWidth();
+				elHeight = $el.outerHeight();
+			};
 
+			move = {
+				right: function () {
+					$el.animate({left: (containerWidth - elWidth)}, {duration: ((containerWidth/settings.speed) * 750), queue: false, easing: "linear", complete: function () {
+						settings.bumpEdge();
+						move.left();
+					}});
+				},
+				left: function () {
+					$el.animate({left: 0}, {duration: ((containerWidth/settings.speed) * 750), queue: false, easing: "linear", complete: function () {
+						settings.bumpEdge();
+						move.right();
+					}});
+				},
+				down: function () {
+					$el.animate({top: (containerHeight - elHeight)}, {duration: ((containerHeight/settings.speed) * 750), queue: false, easing: "linear", complete: function () {
+						settings.bumpEdge();
+						move.up();
+					}});
+				},
+				up: function () {
+					$el.animate({top: 0}, {duration: ((containerHeight/settings.speed) * 750), queue: false, easing: "linear", complete: function () {
+						settings.bumpEdge();
+						move.down();
+					}});
+				}
+			};
+
+			getSizes();
+
+			if (settings.horizontal) {
+				move.right();
+			}
+			if (settings.vertical) {
+				move.down();
+			}
+
+      // Make that shit responsive!
+      $(window).resize( function() {
+        getSizes();
+      });
+		});
+	};
+})(jQuery, window);
+
+$(document).ready( function() {
+
+	$('.marquee').marqueeify({
+		speed: 300,
+		bumpEdge: function () {
+			var newColor = "hsl(" + Math.floor(Math.random()*360) + ", 50%, 50%)";
+			$('.marquee .logo').css('fill', newColor);
+		}
+	});
+});
+
+$( '.logo' ).click(function() {
+  $( '.cover-bg' ).slideToggle();
+});
+
+$( '.cover-bg' ).click(function() {
+  $( '.cover-bg' ).slideToggle();
+});
+
+</script>
+
+</body>
 
 <!--   <h2>Doodles and Boops by <a href="www.aggieng.work">Aggie</a> &amp; <a href="www.spencerhill.work">Spencer</a></h2> -->
